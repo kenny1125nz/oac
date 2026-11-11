@@ -1,0 +1,42 @@
+agents:
+  opencode:
+    cmd: opencode
+    args: [run]
+    flags:
+      subagent: --agent
+      model: --model
+    prompt: positional
+
+  claude-code:
+    cmd: claude
+    flags:
+      model: --model
+    prompt: positional
+
+  codex:
+    cmd: codex
+    flags:
+      model: --model
+    prompt: positional
+
+  gemini:
+    cmd: gemini
+    flags:
+      model: --model
+    prompt: positional
+
+  copilot:
+    cmd: copilot
+    flags:
+      model: --model
+    prompt: positional
+
+  aider:
+    cmd: aider
+    flags:
+      model: --model
+    prompt: --msg
+
+  mockagent:
+    cmd: mockagent
+    prompt: positional

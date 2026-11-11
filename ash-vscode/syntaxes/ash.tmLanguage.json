@@ -1,0 +1,198 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Ash",
+  "scopeName": "source.ash",
+  "fileTypes": ["ash"],
+  "patterns": [
+    { "include": "#shebang" },
+    { "include": "#compact-header" },
+    { "include": "#comment" },
+    { "include": "#text-block" },
+    { "include": "#string" },
+    { "include": "#variable-ref" },
+    { "include": "#command-subst" },
+    { "include": "#file-path" },
+    { "include": "#keyword" },
+    { "include": "#builtin" },
+    { "include": "#fn-decl" },
+    { "include": "#number" },
+    { "include": "#assignment" },
+    { "include": "#operator" }
+  ],
+
+  "repository": {
+    "shebang": {
+      "name": "meta.shebang.ash",
+      "match": "^#![^\\n]*",
+      "captures": {
+        "0": { "name": "comment.line.shebang.ash" }
+      }
+    },
+
+    "compact-header": {
+      "name": "meta.compact-header.ash",
+      "match": "^#!compact[^\\n]*",
+      "captures": {
+        "0": { "name": "entity.other.attribute-name.ash" }
+      }
+    },
+
+    "comment": {
+      "name": "comment.line.number-sign.ash",
+      "begin": "(?<![!])#",
+      "end": "$",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.comment.ash" }
+      }
+    },
+
+    "text-block": {
+      "name": "string.quoted.triple.ash",
+      "begin": "```",
+      "end": "```",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.ash" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.ash" }
+      },
+      "patterns": [
+        { "include": "#variable-ref" },
+        { "include": "#command-subst" }
+      ]
+    },
+
+    "string": {
+      "name": "string.quoted.double.ash",
+      "begin": "\"",
+      "end": "\"",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.ash" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.ash" }
+      },
+      "patterns": [
+        { "include": "#string-escape" },
+        { "include": "#variable-ref" },
+        { "include": "#command-subst" }
+      ]
+    },
+
+    "string-escape": {
+      "name": "constant.character.escape.ash",
+      "match": "\\\\[\\\"\\\\$nrt]"
+    },
+
+    "variable-ref": {
+      "patterns": [
+        {
+          "name": "variable.other.brace.ash",
+          "begin": "\\$\\{",
+          "end": "\\}",
+          "beginCaptures": {
+            "0": { "name": "punctuation.definition.variable.begin.ash" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.variable.end.ash" }
+          },
+          "patterns": [
+            {
+              "name": "support.variable.predefined.ash",
+              "match": "(stderr|stdout|report|\\?)"
+            }
+          ]
+        },
+        {
+          "name": "variable.other.normal.ash",
+          "match": "\\$[a-zA-Z_][a-zA-Z0-9_]*",
+          "captures": {
+            "0": { "name": "variable.other.normal.ash" }
+          }
+        }
+      ]
+    },
+
+    "command-subst": {
+      "name": "string.interpolated.ash",
+      "begin": "\\$\\(",
+      "end": "\\)",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.command.begin.ash" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.command.end.ash" }
+      },
+      "patterns": [
+        { "include": "#string" },
+        { "include": "#variable-ref" }
+      ]
+    },
+
+    "file-path": {
+      "name": "markup.underline.link.ash",
+      "match": "@[^\\s\"'()]+"
+    },
+
+    "keyword": {
+      "patterns": [
+        {
+          "name": "keyword.control.ash",
+          "match": "\\b(if|else|for|while|fn|return|break|continue|do|try|wait|select)\\b"
+        },
+        {
+          "name": "keyword.operator.ash",
+          "match": "\\b(and|or|not)\\b"
+        },
+        {
+          "name": "keyword.other.clause.ash",
+          "match": "\\b(with|subagent|using|compact|evaluate|accept|partial|fail|upto)\\b"
+        },
+        {
+          "name": "constant.language.ash",
+          "match": "\\b(true|false)\\b"
+        }
+      ]
+    },
+
+    "builtin": {
+      "name": "support.function.builtin.ash",
+      "match": "\\b(exec|print|exit|env|include)\\b"
+    },
+
+    "fn-decl": {
+      "name": "meta.function.ash",
+      "begin": "\\bfn\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+      "end": "\\)",
+      "beginCaptures": {
+        "0": { "name": "entity.name.function.ash" },
+        "1": { "name": "entity.name.function.ash" }
+      },
+      "patterns": [
+        {
+          "name": "variable.parameter.ash",
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)"
+        },
+        { "include": "#comment" }
+      ]
+    },
+
+    "number": {
+      "name": "constant.numeric.ash",
+      "match": "\\b(\\d+\\.\\d*|\\.\\d+|0[xX][0-9a-fA-F]+|\\d+)\\b"
+    },
+
+    "assignment": {
+      "name": "meta.assignment.ash",
+      "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?==)",
+      "captures": {
+        "1": { "name": "variable.other.assignment.ash" }
+      }
+    },
+
+    "operator": {
+      "name": "keyword.operator.ash",
+      "match": "==|!=|<=|>=|[-+*/=<>!&]"
+    }
+  }
+}

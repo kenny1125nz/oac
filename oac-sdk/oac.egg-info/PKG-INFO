@@ -1,0 +1,6 @@
+Metadata-Version: 2.4
+Name: oac
+Version: 0.1.0
+Summary: Workspace-based runtime for generative AI task execution
+Requires-Python: >=3.10
+Requires-Dist: gitpython>=3.1
